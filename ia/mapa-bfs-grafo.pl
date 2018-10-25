@@ -3,10 +3,20 @@ aresta(V1,V2) :- aresta(V2,V1).
 
 :-discontiguous aresta/2.
 
-resolva(N,[N]) :- final(N). %alcançou a meta
-% s(N,N1) - faça um movimento valido / resolva(N1,Caminho) - recurs.
-resolva(N,[N|Caminho]) :- s(N,N1), resolva(N1,Caminho).
-s(N,N1) :- aresta(N,N1). %caminho valido se tem aresta
+resolva(No,Solucao) :- depthFirst([],No,Solucao).
+
+depthFirst(Caminho,No,[No|Caminho]) :- final(No).
+depthFirst(Caminho,No,Solucao) :- aresta(No,No1), \+pertence(No1,Caminho), % evita ciclo
+depthFirst([No|Caminho],No1,Solucao).
+pertence(E,[E|_]).
+pertence(E,[_|T]) :- pertence(E,T).
+
+
+
+%resolva(N,[N]) :- final(N). %alcanÃ§ou a meta
+% s(N,N1) - faÃ§a um movimento valido / resolva(N1,Caminho) - recurs.
+%resolva(N,[N|Caminho]) :- s(N,N1), resolva(N1,Caminho).
+%s(N,N1) :- aresta(N,N1). %caminho valido se tem aresta
 
 %%%%%%%%%%%%%% andar1 - horizontal
 aresta(a1,b1).
@@ -73,7 +83,7 @@ aresta(j3,j4).
 aresta(a4,a5).
 aresta(f4,f5).
 
-final(j5). %posiçao do ladrao
+final(j5). %posiÃ§ao do ladrao
 
 %define que as arestas nao sao direcionadas
 %aresta(V1,V2) :- aresta(V2,V1). 
